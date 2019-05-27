@@ -6,11 +6,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using imageUploader.Models;
 using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace imageUploader.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IHostingEnvironment he;
+        public HomeController(IHostingEnvironment e)
+        {
+            he = e;
+        }
         public IActionResult Index()
         {
             return View();
@@ -18,6 +25,13 @@ namespace imageUploader.Controllers
         public IActionResult ShowFields(string fullName, IFormFile pic)
         {
             ViewData["fname"] = fullName;
+            if (pic != null)
+            {
+                var fileName = Path.Combine(he.WebRootPath, Path.GetFileName(pic.FileName));
+                pic.CopyTo(new FileStream(fileName, FileMode.Create));
+                ViewData["fileLocation"] = "/"+Path.GetFileName(pic.FileName);
+            }
+
             return View();
         }
 
