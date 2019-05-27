@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using imageUploader.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace imageUploader.Controllers
 {
@@ -12,6 +13,11 @@ namespace imageUploader.Controllers
     {
         public IActionResult Index()
         {
+            return View();
+        }
+        public IActionResult ShowFields(string fullName, IFormFile pic)
+        {
+            ViewData["fname"] = fullName;
             return View();
         }
 
